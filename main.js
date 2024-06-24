@@ -1,27 +1,27 @@
 // Information to reach API
-const url = 'https://api.datamuse.com/words?rel_syn=';
+const url = 'https://api.datamuse.com/words?';
+const queryParams = 'rel_syn=';
 
 // Selects page elements
 const inputField = document.querySelector('#input');
 const submit = document.querySelector('#submit');
 const responseField = document.querySelector('#responseField');
 
-// Asynchronous function
-const getSuggestions = () => {
+// Async GET request function
+
+const getSuggestions = async () => {
   const wordQuery = inputField.value;
-  const endpoint = `${url}${wordQuery}`;
-  
-  fetch(endpoint).then(response => {
-    if (response.ok) {
-      return response.json();
+  const endpoint = (`${url}${queryParams}${wordQuery}`);
+
+  try {
+    const response = await fetch(endpoint)
+    if(response.ok) {
+      const jsonResponse = await response.json();
+      renderResponse(jsonResponse);
     }
-    throw new Error('Request failed!');
-  }, networkError => {
-    console.log(networkError.message)
-  }).then((jsonResponse) => {
-    //renderRawResponse(jsonResponse);
-    renderResponse(jsonResponse);
-  })
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Clears previous results and display results to webpage
